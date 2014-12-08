@@ -9,6 +9,7 @@
   var pi   = Math.PI;
   var sqrt = Math.sqrt;
   var abs  = Math.abs;
+  var pow  = Math.pow;
 
 
   // Create a constructor with an init function.
@@ -30,6 +31,12 @@
 
     // Number of control points when drawing path.
     this.points = parseInt(d3.select('#points').attr('value'));
+
+    // Radius of control points.
+    this.radii = parseFloat(d3.select('#radii').attr('value'));
+
+    // Radius of control points.
+    this.weight = parseFloat(d3.select('#weight').attr('value'));
 
     // How to curve lines between control points.
     this.interpolation = d3.select('#interpolation').attr('value');
@@ -63,32 +70,30 @@
 
     this.radius = this.width * this.zoom / this.width;
 
-    console.log()
-
     // Create an array of length {points}.
     var data = new Array(this.points);
 
     var lineGenerator = d3.svg.line()
-      .x(function(d, i) { return patterns[that.pattern].x.call(that, d, i); })
-      .y(function(d, i) { return patterns[that.pattern].y.call(that, d, i); })
+      .x(function(d, i) { return patterns[that.pattern].x.call(that, i); })
+      .y(function(d, i) { return patterns[that.pattern].y.call(that, i); })
       .interpolate(this.interpolation);
 
     // Circles show control points.
-    // var circles = this.canvas.selectAll('circle')
-    //   .data(d3.range(0, this.points));
+    var circles = this.canvas.selectAll('circle')
+      .data(d3.range(0, this.points));
 
-    // circles.exit().remove();
-    // circles.enter().append('circle');
+    circles.exit().remove();
+    circles.enter().append('circle');
 
-    // circles
-    //   .transition()
-    //   .attr('cx', function(d, i) { return patterns[that.pattern].x.call(that, d, i); })
-    //   .attr('cy', function(d, i) { return patterns[that.pattern].y.call(that, d, i); })
-    //   .attr('r', 2);
+    circles
+      .transition()
+      .attr('cx', function(d, i) { return patterns[that.pattern].x.call(that, i); })
+      .attr('cy', function(d, i) { return patterns[that.pattern].y.call(that, i); })
+      .attr('r', pow(this.radii, 2));
 
     this.path
       .transition()
-      .attr('class', 'path')
+      .style('stroke-width', this.weight)
       .attr('d', function() { return lineGenerator(data); });
   };
 
@@ -98,12 +103,12 @@
   // Fermat: http://en.wikipedia.org/wiki/Fermat%27s_spiral
   var patterns = {
     circle: {
-      x: function(d, i) { return sin(i * this.step * (pi/180)) * this.radius * (1 - this.inner * (i%2)) + (this.width/2); },
-      y: function(d, i) { return cos(i * this.step * (pi/180)) * this.radius * (1 - this.inner * (i%2)) + (this.height/2); }
+      x: function(i) { return sin(i * this.step * (pi/180)) * this.radius * (1 - this.inner * (i%2)) + (this.width/2); },
+      y: function(i) { return cos(i * this.step * (pi/180)) * this.radius * (1 - this.inner * (i%2)) + (this.height/2); }
     },
     fermat: {
-      x: function(d, i) { return (this.zoom/2 * sqrt(abs((i - this.points/2)))) * cos((i - this.points/2) * this.step) * (1 - this.inner * (i%2)) + (this.width/2); },
-      y: function(d, i) { return (this.zoom/2 * sqrt(abs((i - this.points/2)))) * sin((i - this.points/2) * this.step) * (1 - this.inner * (i%2)) + (this.height/2); }
+      x: function(i) { return (this.zoom/2 * sqrt(i) * cos(i * this.step)) * (1 - this.inner * (i%2)) + (this.width/2); },
+      y: function(i) { return (this.zoom/2 * sqrt(i) * sin(i * this.step)) * (1 - this.inner * (i%2)) + (this.height/2); }
     }
   };
 

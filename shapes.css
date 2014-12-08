@@ -24,8 +24,9 @@ body {
 }
 
 svg circle {
-  fill: #FEFEFE;
-  stroke: none;
+  fill: none;
+  stroke-width: 2px;
+  stroke: #FEFEFE;
 }
 
 svg path {

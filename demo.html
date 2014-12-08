@@ -27,6 +27,16 @@
         </tr>
 
         <tr>
+          <td><label for="radii">Radii</label></td>
+          <td><input type="range" id="radii" min="0" value="0" max="20" step="1" onChange="shape.update(id, value)"></td>
+        </tr>
+
+        <tr>
+          <td><label for="weight">Weight</label></td>
+          <td><input type="range" id="weight" min="0" value="2" max="20" step="1" onChange="shape.update(id, value)"></td>
+        </tr>
+
+        <tr>
           <td><label for="zoom">Zoom</label></td>
           <td><input type="range" id="zoom" min="1" value="200" max="1000" step="10" onChange="shape.update(id, value)"></td>
         </tr>
