@@ -36,6 +36,9 @@
     // Technically radius, but we'll call it "zoom".
     this.zoom = parseInt(d3.select('#zoom').attr('value'));
 
+    // Ratio of size of inner shape to outer shape.
+    this.inner = parseInt(d3.select('#inner').attr('value'));
+
     this.canvas = d3.select('.canvas');
     this.path = this.canvas.append('path');
 
@@ -57,10 +60,9 @@
     var radius = this.width * this.zoom / this.width;
 
     // Place points and path coordinates around the circumference of a circle.
-    // Based on index of value in data array and multiplied by "step".
     // http://stackoverflow.com/questions/13672867/how-to-place-svg-shapes-in-a-circle
-    var x = function(datum, index) { return sin(index * that.step * (pi / 180)) * radius + (that.width / 2); };
-    var y = function(datum, index) { return cos(index * that.step * (pi / 180)) * radius + (that.height / 2); };
+    var x = function(datum, index) { return sin(index * that.step * (pi / 180)) * radius * (1 - that.inner * (index % 2)) + (that.width / 2); };
+    var y = function(datum, index) { return cos(index * that.step * (pi / 180)) * radius * (1 - that.inner * (index % 2)) + (that.height / 2); };
 
     // Create an array of length {points}.
     var data = d3.range(0, this.points);
