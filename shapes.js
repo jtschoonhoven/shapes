@@ -8,6 +8,7 @@
   var cos  = Math.cos;
   var pi   = Math.PI;
   var sqrt = Math.sqrt;
+  var abs  = Math.abs;
 
 
   // Create a constructor with an init function.
@@ -39,6 +40,9 @@
     // Ratio of size of inner shape to outer shape.
     this.inner = parseInt(d3.select('#inner').attr('value'));
 
+    // Base pattern on which control points are aligned.
+    this.pattern = d3.select('#pattern').attr('value');
+
     this.canvas = d3.select('.canvas');
     this.path = this.canvas.append('path');
 
@@ -57,41 +61,50 @@
   Shapes.prototype.draw = function() {
     var that = this;
 
-    var radius = this.width * this.zoom / this.width;
+    this.radius = this.width * this.zoom / this.width;
 
-    // Place points and path coordinates around the circumference of a circle.
-    // http://stackoverflow.com/questions/13672867/how-to-place-svg-shapes-in-a-circle
-    var x = function(datum, index) { return sin(index * that.step * (pi / 180)) * radius * (1 - that.inner * (index % 2)) + (that.width / 2); };
-    var y = function(datum, index) { return cos(index * that.step * (pi / 180)) * radius * (1 - that.inner * (index % 2)) + (that.height / 2); };
+    console.log()
 
     // Create an array of length {points}.
-    var data = d3.range(0, this.points);
+    var data = new Array(this.points);
 
     var lineGenerator = d3.svg.line()
-      .x(x).y(y)
+      .x(function(d, i) { return patterns[that.pattern].x.call(that, d, i); })
+      .y(function(d, i) { return patterns[that.pattern].y.call(that, d, i); })
       .interpolate(this.interpolation);
 
     // Circles show control points.
-    var circles = this.canvas.selectAll('circle')
-      .data(d3.range(0, this.points));
+    // var circles = this.canvas.selectAll('circle')
+    //   .data(d3.range(0, this.points));
 
-    circles.exit().remove();
+    // circles.exit().remove();
+    // circles.enter().append('circle');
 
-    circles
-      .enter()
-      .append('circle')
-
-    circles
-      .transition()
-      .attr('cx', x)
-      .attr('cy', y)
-      .attr('r', 2);
+    // circles
+    //   .transition()
+    //   .attr('cx', function(d, i) { return patterns[that.pattern].x.call(that, d, i); })
+    //   .attr('cy', function(d, i) { return patterns[that.pattern].y.call(that, d, i); })
+    //   .attr('r', 2);
 
     this.path
       .transition()
-      // .ease('elastic')
       .attr('class', 'path')
       .attr('d', function() { return lineGenerator(data); });
+  };
+
+
+  // Scaling functions that accept an index value and return cartesian coordinates of a pattern.
+  // Circle: http://stackoverflow.com/questions/13672867/how-to-place-svg-shapes-in-a-circle
+  // Fermat: http://en.wikipedia.org/wiki/Fermat%27s_spiral
+  var patterns = {
+    circle: {
+      x: function(d, i) { return sin(i * this.step * (pi/180)) * this.radius * (1 - this.inner * (i%2)) + (this.width/2); },
+      y: function(d, i) { return cos(i * this.step * (pi/180)) * this.radius * (1 - this.inner * (i%2)) + (this.height/2); }
+    },
+    fermat: {
+      x: function(d, i) { return (this.zoom/2 * sqrt(abs((i - this.points/2)))) * cos((i - this.points/2) * this.step) * (1 - this.inner * (i%2)) + (this.width/2); },
+      y: function(d, i) { return (this.zoom/2 * sqrt(abs((i - this.points/2)))) * sin((i - this.points/2) * this.step) * (1 - this.inner * (i%2)) + (this.height/2); }
+    }
   };
 
 

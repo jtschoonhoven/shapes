@@ -18,7 +18,7 @@
 
         <tr>
           <td><label for="step">Step</label></td>
-          <td><input type="range" id="step" min="0" value="30" max="360" step="1" onChange="shape.update(id, value)"></td>
+          <td><input type="range" id="step" min="0" value="137" max="360" step="1" onChange="shape.update(id, value)"></td>
         </tr>
 
         <tr>
@@ -34,10 +34,21 @@
         <tr>
           <td><label for="interpolation">Interpolation</td>
           <td>
-            <select id="interpolation" name="interpolation" onChange="shape.update(id, value)">
-              <option value="basis" selected>Basis</option> 
+            <select id="interpolation" name="interpolation" value="basis" onChange="shape.update(id, value)">
+              <option value="basis">Basis</option> 
               <option value="step">Step</option>
               <option value="cardinal">Cardinal</option>
+              <option value="linear">Linear</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr>
+          <td><label for="pattern">Pattern</td>
+          <td>
+            <select id="pattern" name="pattern" value="circle" onChange="shape.update(id, value)">
+              <option value="circle">Circle</option> 
+              <option value="fermat">Fermat's spiral</option>
             </select>
           </td>
         </tr>
