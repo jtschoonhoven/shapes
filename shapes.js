@@ -70,24 +70,24 @@
       .interpolate(this.interpolation);
 
     // Circles show control points.
-    // var circles = this.canvas.selectAll('circle')
-    //   .data(d3.range(0, this.points));
+    var circles = this.canvas.selectAll('circle')
+      .data(d3.range(0, this.points));
 
-    // circles.exit().remove();
+    circles.exit().remove();
 
-    // circles
-    //   .enter()
-    //   .append('circle')
+    circles
+      .enter()
+      .append('circle')
 
-    // circles
-    //   .transition()
-    //   .attr('cx', x)
-    //   .attr('cy', y)
-    //   .attr('r', 2);
+    circles
+      .transition()
+      .attr('cx', x)
+      .attr('cy', y)
+      .attr('r', 2);
 
     this.path
       .transition()
-      .ease('elastic')
+      // .ease('elastic')
       .attr('class', 'path')
       .attr('d', function() { return lineGenerator(data); });
   };
