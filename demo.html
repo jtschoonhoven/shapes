@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <meta charset="UTF8">
+    <script type="text/javascript" src="./bower_components/d3/d3.js"></script>
+    <script type="text/javascript" src="./shapes.js"></script>
+    <link href="shapes.css" rel="stylesheet" type="text/css" media="all">
+  </head>
+
+  <body>
+
+    <div class="menu">
+      <table>
+
+        <tr>
+          <td><label for="points">Points</label></td>
+          <td><input type="range" id="points" min="0" value="10" max="500" step="1" onChange="shape.update(id, value)"></td>
+        </tr>
+
+        <tr>
+          <td><label for="step">Step</label></td>
+          <td><input type="range" id="step" min="0" value="30" max="360" step="1" onChange="shape.update(id, value)"></td>
+        </tr>
+
+        <tr>
+          <td><label for="zoom">Zoom</label></td>
+          <td><input type="range" id="zoom" min="1" value="200" max="1000" step="10" onChange="shape.update(id, value)"></td>
+        </tr>
+
+        <tr>
+          <td><label for="interpolation">Interpolation</td>
+          <td>
+            <select id="interpolation" name="interpolation" onChange="shape.update(id, value)">
+              <option value="basis" selected>Basis</option> 
+              <option value="step">Step</option>
+              <option value="cardinal">Cardinal</option>
+            </select>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+
+    <svg class="canvas"></svg>
+
+    <script>
+      var shape = new Shapes();
+    </script>
+  </body>
+</html>
