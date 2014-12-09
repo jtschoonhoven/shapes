@@ -1,8 +1,6 @@
 <html>
   <head>
     <meta charset="UTF8">
-    <script type="text/javascript" src="./bower_components/d3/d3.js"></script>
-    <script type="text/javascript" src="./shapes.js"></script>
     <link href="shapes.css" rel="stylesheet" type="text/css" media="all">
   </head>
 
@@ -68,11 +66,18 @@
           </td>
         </tr>
 
+        <tr>
+          <td colspan="2">Doubleclick sliders to animate.</td>
+        </tr>
+
       </table>
     </div>
 
     <svg><g class="canvas"></g></svg>
 
+    <!-- <script type="text/javascript" src="./bower_components/d3/d3.js" charset="utf-8"></script> -->
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./shapes.js"></script>
     <script>var shape = new Shapes();</script>
 
   </body>
