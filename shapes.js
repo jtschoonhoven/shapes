@@ -50,11 +50,14 @@
     // Rotate along center.
     this.rotation = parseFloat(d3.select('#rotation').attr('value'));
 
+    // Rotate every other control point independently of group.
+    this.innerRotation = parseFloat(d3.select('#innerRotation').attr('value'));
+
     // Technically radius, but we'll call it "zoom".
     this.zoom = parseFloat(d3.select('#zoom').attr('value'));
 
     // Ratio of size of inner shape to outer shape.
-    this.inner = parseFloat(d3.select('#inner').attr('value'));
+    this.innerScale = parseFloat(d3.select('#innerScale').attr('value'));
 
     // Base pattern on which control points are aligned.
     this.pattern = d3.select('#pattern').attr('value');
@@ -70,6 +73,7 @@
   };
 
 
+  // Automatically bounce between max and min values on doubleclick.
   Shapes.prototype.animate = function(attribute, val, min, max, step, saw) {
     var that = this;
 
@@ -112,8 +116,8 @@
       circles.enter().append('circle');
 
       circles.transition().ease('linear')
-        .attr('cx', function(d, i) { return patterns[that.pattern].x.call(that, i); })
-        .attr('cy', function(d, i) { return patterns[that.pattern].y.call(that, i); })
+        .attr('cx', function(d,i) { return patterns[that.pattern].x.call(that, i); })
+        .attr('cy', function(d,i) { return patterns[that.pattern].y.call(that, i); })
         .attr('r', pow(this.radii, 2));
     } else { canvas.selectAll('circle').remove(); }
 
@@ -124,8 +128,8 @@
       path.enter().append('path');
 
       var lineGenerator = d3.svg.line()
-        .x(function(d, i) { return patterns[that.pattern].x.call(that, i); })
-        .y(function(d, i) { return patterns[that.pattern].y.call(that, i); })
+        .x(function(d,i) { return patterns[that.pattern].x.call(that, i); })
+        .y(function(d,i) { return patterns[that.pattern].y.call(that, i); })
         .interpolate(this.interpolation);
 
       path.transition().ease('linear')
@@ -140,13 +144,13 @@
 
   var patterns = {
     circle: {
-      x: function(i) { return sin(i * this.step * (pi/180)) * this.radius * (1 - this.inner * (i%2)) + (this.width/2); },
-      y: function(i) { return cos(i * this.step * (pi/180)) * this.radius * (1 - this.inner * (i%2)) + (this.height/2); }
+      x: function(i) { return sin(i * this.step * (1 - this.innerRotation/this.points * (i%2)) * (pi/180)) * this.radius * (1 - this.innerScale * (i%2)) + this.width/2; },
+      y: function(i) { return cos(i * this.step * (1 - this.innerRotation/this.points * (i%2)) * (pi/180)) * this.radius * (1 - this.innerScale * (i%2)) + this.height/2; }
     },
 
     fermat: {
-      x: function(i) { return (this.zoom/2 * sqrt(i) * cos(i * this.step)) * (1 - this.inner * (i%2)) + (this.width/2); },
-      y: function(i) { return (this.zoom/2 * sqrt(i) * sin(i * this.step)) * (1 - this.inner * (i%2)) + (this.height/2); }
+      x: function(i) { return (this.zoom/2 * sqrt(i) * cos(i * this.step * (1 - this.innerRotation/pow(this.points,1.7) * (i%2)))) * (1 - this.innerScale * (i%2)) + this.width/2; },
+      y: function(i) { return (this.zoom/2 * sqrt(i) * sin(i * this.step * (1 - this.innerRotation/pow(this.points,1.7) * (i%2)))) * (1 - this.innerScale * (i%2)) + this.height/2; }
     }
   };
 

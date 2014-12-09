@@ -17,7 +17,7 @@
         </tr>
 
         <tr>
-          <td><label for="showCircles">Show circles</label></td>
+          <td><label for="showCircles">Show control points</label></td>
           <td><input type="checkbox" id="showCircles" name="showCircles" onChange="shape.update(id, checked)"/></td>
         </tr>
 
@@ -28,12 +28,12 @@
 
         <tr>
           <td><label for="step">Step</label></td>
-          <td><input type="range" id="step" min="0" value="137" max="360" step="0.1" onChange="shape.update(id, value)" onDblClick="shape.animate(id, value, min, max, step)"></td>
+          <td><input type="range" id="step" min="0" value="137" max="360" step="0.005" onChange="shape.update(id, value)" onDblClick="shape.animate(id, value, min, max, step)"></td>
         </tr>
 
         <tr>
-          <td><label for="inner">Inner</label></td>
-          <td><input type="range" id="inner" min="-1" value="0" max="1" step="0.01" onChange="shape.update(id, value)" onDblClick="shape.animate(id, value, min, max, step)"></td>
+          <td><label for="innerScale">Inner scale</label></td>
+          <td><input type="range" id="innerScale" min="-1" value="0" max="1" step="0.01" onChange="shape.update(id, value)" onDblClick="shape.animate(id, value, min, max, step)"></td>
         </tr>
 
         <tr>
@@ -44,6 +44,11 @@
         <tr>
           <td><label for="rotation">Rotation</label></td>
           <td><input type="range" id="rotation" min="0" value="0" max="360" step="1" onChange="shape.update(id, value)" onDblClick="shape.animate(id, value, min, max, step)"></td>
+        </tr>
+
+        <tr>
+          <td><label for="innerRotation">Inner rotation</label></td>
+          <td><input type="range" id="innerRotation" min="-1" value="0" max="1" step="0.01" onChange="shape.update(id, value)" onDblClick="shape.animate(id, value, min, max, step)"></td>
         </tr>
 
         <tr>
@@ -79,6 +84,6 @@
     <svg><g class="canvas"></g></svg>
 
     <script>var shape = new Shapes();</script>
-    
+
   </body>
 </html>
