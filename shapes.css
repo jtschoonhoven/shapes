@@ -23,14 +23,7 @@ svg {
   z-index: 0;
 }
 
-svg circle {
-  fill: none;
-  stroke-width: 1.5px;
-  stroke: #FEFEFE;
-}
-
 svg path {
-  stroke: #FEFEFE;
-  stroke-width: 1px;
+  stroke-width: 1.5px;
   fill: none;
 }
