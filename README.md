@@ -2,7 +2,7 @@ Shapes.js
 =========
 
 Let's make some crazy geometric patterns with D3.
-Hosted at [jtschoonhoven.github.io]([http://jtschoonhoven.github.io/shapes/]).
+Hosted at [jtschoonhoven.github.io](http://jtschoonhoven.github.io/shapes/).
 
 TODO
 * Preset colorschemes
